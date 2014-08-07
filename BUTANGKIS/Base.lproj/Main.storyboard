@@ -27,28 +27,52 @@
                                 </connections>
                             </button>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GYp-rv-wQ5">
-                                <rect key="frame" x="20" y="64" width="280" height="446"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="446"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7WI-OT-DhD">
+                                        <rect key="frame" x="0.0" y="0.0" width="104" height="104"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dsa-U0-qUL">
+                                        <rect key="frame" x="216" y="0.0" width="104" height="104"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o6b-tz-aP3">
+                                        <rect key="frame" x="108" y="0.0" width="104" height="104"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eKw-He-DMw">
+                                        <rect key="frame" x="0.0" y="108" width="104" height="104"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    </imageView>
+                                </subviews>
+                                <connections>
+                                    <outlet property="delegate" destination="vXZ-lx-hvc" id="SSC-zk-7OF"/>
+                                </connections>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="GYp-rv-wQ5" firstAttribute="trailing" secondItem="NPA-Xh-NEV" secondAttribute="trailing" id="HF1-8f-jZn"/>
+                            <constraint firstItem="GYp-rv-wQ5" firstAttribute="trailing" secondItem="NPA-Xh-NEV" secondAttribute="trailing" constant="20" id="HF1-8f-jZn"/>
                             <constraint firstItem="GYp-rv-wQ5" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" id="I8e-ba-m0z"/>
-                            <constraint firstAttribute="trailing" secondItem="GYp-rv-wQ5" secondAttribute="trailing" constant="20" symbolic="YES" id="JKE-dz-N4v"/>
+                            <constraint firstAttribute="trailing" secondItem="GYp-rv-wQ5" secondAttribute="trailing" id="JKE-dz-N4v"/>
                             <constraint firstItem="NPA-Xh-NEV" firstAttribute="top" secondItem="GYp-rv-wQ5" secondAttribute="bottom" constant="8" symbolic="YES" id="W86-hH-iJr"/>
-                            <constraint firstItem="GYp-rv-wQ5" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" symbolic="YES" id="X7l-Zd-bNi"/>
-                            <constraint firstItem="NPA-Xh-NEV" firstAttribute="leading" secondItem="GYp-rv-wQ5" secondAttribute="leading" id="oOE-Gd-dyS"/>
+                            <constraint firstItem="GYp-rv-wQ5" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="X7l-Zd-bNi"/>
+                            <constraint firstItem="NPA-Xh-NEV" firstAttribute="leading" secondItem="GYp-rv-wQ5" secondAttribute="leading" constant="20" id="oOE-Gd-dyS"/>
                             <constraint firstAttribute="bottom" secondItem="NPA-Xh-NEV" secondAttribute="bottom" constant="20" symbolic="YES" id="qU8-Kk-GZs"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="bI3-LE-lLm">
                         <barButtonItem key="rightBarButtonItem" systemItem="compose" id="LDD-D2-VH6"/>
                     </navigationItem>
+                    <connections>
+                        <outlet property="imagesScrollView" destination="GYp-rv-wQ5" id="ICb-Kl-YeD"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="785" y="31"/>
+            <point key="canvasLocation" x="628" y="9"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="g1U-N3-TYO">
@@ -66,7 +90,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Ml-0Y-Efl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="321" y="103"/>
+            <point key="canvasLocation" x="91" y="97"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
