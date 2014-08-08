@@ -30,6 +30,100 @@ NSString *k_album = @"BUTANGKIS";
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
+    [self enumerateAsset];
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+-(IBAction)openCamera:(id)sender
+{
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.allowsEditing = NO;
+    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    picker.modalPresentationStyle = UIModalPresentationFullScreen;
+
+    [self presentViewController:picker animated:YES completion:NULL];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
+    //camera roll. NOT YET SUPPORTED FOR NOW!
+    if(picker.sourceType == UIImagePickerControllerSourceTypePhotoLibrary)
+    {
+        // get the ref url
+        NSURL *refURL = [info valueForKey:UIImagePickerControllerReferenceURL];
+        
+        // define the block to call when we get the asset based on the url (below)
+        ALAssetsLibraryAssetForURLResultBlock resultblock = ^(ALAsset *imageAsset)
+        {
+            ALAssetRepresentation *imageRep = [imageAsset defaultRepresentation];
+            
+            // Retrieve the image orientation from the ALAsset
+            UIImageOrientation orientation = UIImageOrientationUp;
+            NSNumber* orientationValue = [imageAsset valueForProperty:@"ALAssetPropertyOrientation"];
+            if (orientationValue != nil) {
+                orientation = [orientationValue intValue];
+            }
+            
+            UIImage *image = [UIImage imageWithCGImage:[imageRep fullResolutionImage] scale:1.0 orientation:orientation];
+            
+            //UIImage *lowResImage = [image resizedImageToFitInSize:CGSizeMake(320, 480) scaleIfSmaller:YES];
+            
+            /*[self.library saveImage:lowResImage toAlbum:k_album withCompletionBlock:^(NSError *error) {
+                if (error!=nil) {
+                    NSLog(@"Big error: %@", [error description]);
+                }
+            }];*/
+            
+            [self.library saveImage:image toAlbum:k_album completion:^(NSURL *assetURL, NSError *error) {
+                [self cleanUpAssetAndGroup];
+                [self enumerateAsset];
+            } failure:^(NSError *error) {
+                
+            }];
+        };
+        
+        // get the asset library and fetch the asset based on the ref url (pass in block above)
+        ALAssetsLibrary* assetslibrary = [[ALAssetsLibrary alloc] init];
+        [assetslibrary assetForURL:refURL resultBlock:resultblock failureBlock:nil];
+    }
+    else //camera
+    {
+        UIImage *takenImage=info[UIImagePickerControllerOriginalImage];
+        
+        //UIImage *lowResImage = [takenImage resizedImageToFitInSize:CGSizeMake(320, 480) scaleIfSmaller:YES];
+        
+        /*[self.library saveImage:lowResImage toAlbum:k_album withCompletionBlock:^(NSError *error) {
+            if (error!=nil) {
+                NSLog(@"Big error: %@", [error description]);
+            }
+        }];*/
+        
+        [self.library saveImage:takenImage toAlbum:k_album completion:^(NSURL *assetURL, NSError *error) {
+            [self cleanUpAssetAndGroup];
+            [self enumerateAsset];
+        } failure:^(NSError *error) {
+            DDLogVerbose(@"Saving image failed: %@",error);
+        }];
+    }
+    
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+}
+
+
+-(void)cleanUpAssetAndGroup
+{
+    _library = nil;
+    _assets = nil;
+}
+
+-(void)enumerateAsset
+{
     if (self.library == nil) {
         _library = [[ALAssetsLibrary alloc] init];
     }
@@ -67,85 +161,6 @@ NSString *k_album = @"BUTANGKIS";
     }];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
--(IBAction)openCamera:(id)sender
-{
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    picker.delegate = self;
-    picker.allowsEditing = YES;
-    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-    picker.modalPresentationStyle = UIModalPresentationFullScreen;
-
-    [self presentViewController:picker animated:YES completion:NULL];
-}
-
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    
-    if(picker.sourceType == UIImagePickerControllerSourceTypePhotoLibrary) //camera roll
-    {
-        // get the ref url
-        NSURL *refURL = [info valueForKey:UIImagePickerControllerReferenceURL];
-        
-        // define the block to call when we get the asset based on the url (below)
-        ALAssetsLibraryAssetForURLResultBlock resultblock = ^(ALAsset *imageAsset)
-        {
-            ALAssetRepresentation *imageRep = [imageAsset defaultRepresentation];
-            
-            // Retrieve the image orientation from the ALAsset
-            UIImageOrientation orientation = UIImageOrientationUp;
-            NSNumber* orientationValue = [imageAsset valueForProperty:@"ALAssetPropertyOrientation"];
-            if (orientationValue != nil) {
-                orientation = [orientationValue intValue];
-            }
-            
-            UIImage *image = [UIImage imageWithCGImage:[imageRep fullResolutionImage] scale:1.0 orientation:orientation];
-            UIImage *lowResImage = [image resizedImageToFitInSize:CGSizeMake(320, 480) scaleIfSmaller:YES];
-            
-            /*[self.library saveImage:lowResImage toAlbum:k_album withCompletionBlock:^(NSError *error) {
-                if (error!=nil) {
-                    NSLog(@"Big error: %@", [error description]);
-                }
-            }];*/
-            
-            [self.library saveImage:lowResImage toAlbum:k_album completion:^(NSURL *assetURL, NSError *error) {
-                
-            } failure:^(NSError *error) {
-                
-            }];
-        };
-        
-        // get the asset library and fetch the asset based on the ref url (pass in block above)
-        ALAssetsLibrary* assetslibrary = [[ALAssetsLibrary alloc] init];
-        [assetslibrary assetForURL:refURL resultBlock:resultblock failureBlock:nil];
-    }
-    else //camera
-    {
-        UIImage *takenImage=info[UIImagePickerControllerOriginalImage];
-        
-        UIImage *lowResImage = [takenImage resizedImageToFitInSize:CGSizeMake(320, 480) scaleIfSmaller:YES];
-        
-        /*[self.library saveImage:lowResImage toAlbum:k_album withCompletionBlock:^(NSError *error) {
-            if (error!=nil) {
-                NSLog(@"Big error: %@", [error description]);
-            }
-        }];*/
-        
-        [self.library saveImage:lowResImage toAlbum:k_album completion:^(NSURL *assetURL, NSError *error) {
-            [self prepareAssets];
-        } failure:^(NSError *error) {
-            
-        }];
-    }
-    
-    [picker dismissViewControllerAnimated:YES completion:NULL];
-}
-
-
 -(void)prepareAssets
 {
     if (!self.assets) {
@@ -158,6 +173,11 @@ NSString *k_album = @"BUTANGKIS";
         
         if (result) {
             [self.assets addObject:result];
+        }
+        else
+        {
+            NSArray *reversedArray = [[self.assets reverseObjectEnumerator] allObjects];
+            self.assets = (NSMutableArray *)reversedArray;
         }
     };
     
@@ -179,7 +199,7 @@ NSString *k_album = @"BUTANGKIS";
 #define kImageViewTag 1 // the image view inside the collection view cell prototype is tagged with "1"
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
+    DDLogVerbose(@"assets %@",self.assets);
     static NSString *CellIdentifier = @"photoCell";
     
     UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
