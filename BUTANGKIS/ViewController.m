@@ -15,6 +15,8 @@
 #import "MyPageViewController.h"
 #import "PageViewControllerData.h"
 
+#import "CreateMemeViewController.h"
+
 
 @interface ViewController ()
     @property (nonatomic, strong) ALAssetsGroup *groupAsset;
@@ -72,14 +74,6 @@ NSString *k_album = @"BUTANGKIS";
             
             UIImage *image = [UIImage imageWithCGImage:[imageRep fullResolutionImage] scale:1.0 orientation:orientation];
             
-            //UIImage *lowResImage = [image resizedImageToFitInSize:CGSizeMake(320, 480) scaleIfSmaller:YES];
-            
-            /*[self.library saveImage:lowResImage toAlbum:k_album withCompletionBlock:^(NSError *error) {
-                if (error!=nil) {
-                    NSLog(@"Big error: %@", [error description]);
-                }
-            }];*/
-            
             [self.library saveImage:image toAlbum:k_album completion:^(NSURL *assetURL, NSError *error) {
                 [self cleanUpAssetAndGroup];
                 [self enumerateAsset];
@@ -96,23 +90,19 @@ NSString *k_album = @"BUTANGKIS";
     {
         UIImage *takenImage=info[UIImagePickerControllerOriginalImage];
         
-        //UIImage *lowResImage = [takenImage resizedImageToFitInSize:CGSizeMake(320, 480) scaleIfSmaller:YES];
-        
-        /*[self.library saveImage:lowResImage toAlbum:k_album withCompletionBlock:^(NSError *error) {
-            if (error!=nil) {
-                NSLog(@"Big error: %@", [error description]);
-            }
-        }];*/
-        
         [self.library saveImage:takenImage toAlbum:k_album completion:^(NSURL *assetURL, NSError *error) {
-            [self cleanUpAssetAndGroup];
-            [self enumerateAsset];
+        
+            //[self cleanUpAssetAndGroup];
+            //[self enumerateAsset];
+            
+            [picker dismissViewControllerAnimated:NO completion:NULL];
+            
+            [self createMeme:takenImage];
+        
         } failure:^(NSError *error) {
             DDLogVerbose(@"Saving image failed: %@",error);
         }];
     }
-    
-    [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
 
@@ -148,7 +138,6 @@ NSString *k_album = @"BUTANGKIS";
         }
         else
         {
-            //[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
             [self prepareAssets];
         }
     };
@@ -199,7 +188,7 @@ NSString *k_album = @"BUTANGKIS";
 #define kImageViewTag 1 // the image view inside the collection view cell prototype is tagged with "1"
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    DDLogVerbose(@"assets %@",self.assets);
+
     static NSString *CellIdentifier = @"photoCell";
     
     UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
@@ -231,6 +220,14 @@ NSString *k_album = @"BUTANGKIS";
         NSIndexPath *selectedCell = [self.collectionView indexPathsForSelectedItems][0];
         pageViewController.startingIndex = selectedCell.row;
     }
+}
+
+-(void)createMeme:(UIImage *)image
+{
+    CreateMemeViewController *createMeme = [[CreateMemeViewController alloc] init];
+    createMeme.image = image;
+    
+    [self presentViewController:createMeme animated:YES completion:nil];
 }
 
 @end

@@ -30,6 +30,8 @@
 		4D370DB41994935300898B32 /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D370DB31994935300898B32 /* PhotoViewController.m */; };
 		4D370DB71994936500898B32 /* ImageScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D370DB61994936500898B32 /* ImageScrollView.m */; };
 		4D370DBA1994937C00898B32 /* PageViewControllerData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D370DB91994937C00898B32 /* PageViewControllerData.m */; };
+		4D370DC41994C5F900898B32 /* CreateMemeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D370DC21994C5F900898B32 /* CreateMemeViewController.m */; };
+		4D370DC51994C5F900898B32 /* CreateMemeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4D370DC31994C5F900898B32 /* CreateMemeViewController.xib */; };
 		4D57539419934FAD002678F9 /* ALAssetsLibrary+CustomAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D57539319934FAD002678F9 /* ALAssetsLibrary+CustomAlbum.m */; };
 		4DC4BF721991E6A000C638EE /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DC4BF711991E6A000C638EE /* ImageIO.framework */; };
 		4DC4BF971991E7FD00C638EE /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DC4BF771991E7FD00C638EE /* MKAnnotationView+WebCache.m */; };
@@ -98,6 +100,9 @@
 		4D370DB61994936500898B32 /* ImageScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageScrollView.m; sourceTree = "<group>"; };
 		4D370DB81994937C00898B32 /* PageViewControllerData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageViewControllerData.h; sourceTree = "<group>"; };
 		4D370DB91994937C00898B32 /* PageViewControllerData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PageViewControllerData.m; sourceTree = "<group>"; };
+		4D370DC11994C5F900898B32 /* CreateMemeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateMemeViewController.h; sourceTree = "<group>"; };
+		4D370DC21994C5F900898B32 /* CreateMemeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateMemeViewController.m; sourceTree = "<group>"; };
+		4D370DC31994C5F900898B32 /* CreateMemeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CreateMemeViewController.xib; sourceTree = "<group>"; };
 		4D57539219934FAD002678F9 /* ALAssetsLibrary+CustomAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALAssetsLibrary+CustomAlbum.h"; sourceTree = "<group>"; };
 		4D57539319934FAD002678F9 /* ALAssetsLibrary+CustomAlbum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALAssetsLibrary+CustomAlbum.m"; sourceTree = "<group>"; };
 		4DC4BF711991E6A000C638EE /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
@@ -195,7 +200,8 @@
 		4D01618E1990DE4200667793 /* BUTANGKIS */ = {
 			isa = PBXGroup;
 			children = (
-				4D575397199355CE002678F9 /* FlowLayout */,
+				4D370DBD1994C58F00898B32 /* ImageEdit */,
+				4D370DBB1994C56F00898B32 /* ImageViewer */,
 				4DC4BF751991E7FD00C638EE /* SDWebImage */,
 				4DC4BF6A1991D6BB00C638EE /* CustomAlbum */,
 				4D0161C11990E0D700667793 /* DDLog */,
@@ -205,14 +211,6 @@
 				4D01619A1990DE4200667793 /* Main.storyboard */,
 				4D01619D1990DE4200667793 /* ViewController.h */,
 				4D01619E1990DE4200667793 /* ViewController.m */,
-				4D370DAF1994931000898B32 /* MyPageViewController.h */,
-				4D370DB01994931000898B32 /* MyPageViewController.m */,
-				4D370DB21994935300898B32 /* PhotoViewController.h */,
-				4D370DB31994935300898B32 /* PhotoViewController.m */,
-				4D370DB51994936500898B32 /* ImageScrollView.h */,
-				4D370DB61994936500898B32 /* ImageScrollView.m */,
-				4D370DB81994937C00898B32 /* PageViewControllerData.h */,
-				4D370DB91994937C00898B32 /* PageViewControllerData.m */,
 				4D0161A01990DE4200667793 /* Images.xcassets */,
 				4D01618F1990DE4200667793 /* Supporting Files */,
 			);
@@ -272,11 +270,29 @@
 			name = DDLog;
 			sourceTree = "<group>";
 		};
-		4D575397199355CE002678F9 /* FlowLayout */ = {
+		4D370DBB1994C56F00898B32 /* ImageViewer */ = {
 			isa = PBXGroup;
 			children = (
+				4D370DAF1994931000898B32 /* MyPageViewController.h */,
+				4D370DB01994931000898B32 /* MyPageViewController.m */,
+				4D370DB21994935300898B32 /* PhotoViewController.h */,
+				4D370DB31994935300898B32 /* PhotoViewController.m */,
+				4D370DB51994936500898B32 /* ImageScrollView.h */,
+				4D370DB61994936500898B32 /* ImageScrollView.m */,
+				4D370DB81994937C00898B32 /* PageViewControllerData.h */,
+				4D370DB91994937C00898B32 /* PageViewControllerData.m */,
 			);
-			name = FlowLayout;
+			name = ImageViewer;
+			sourceTree = "<group>";
+		};
+		4D370DBD1994C58F00898B32 /* ImageEdit */ = {
+			isa = PBXGroup;
+			children = (
+				4D370DC11994C5F900898B32 /* CreateMemeViewController.h */,
+				4D370DC21994C5F900898B32 /* CreateMemeViewController.m */,
+				4D370DC31994C5F900898B32 /* CreateMemeViewController.xib */,
+			);
+			name = ImageEdit;
 			sourceTree = "<group>";
 		};
 		4DC4BF6A1991D6BB00C638EE /* CustomAlbum */ = {
@@ -404,6 +420,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D370DC51994C5F900898B32 /* CreateMemeViewController.xib in Resources */,
 				4D0161A11990DE4200667793 /* Images.xcassets in Resources */,
 				4D0161931990DE4200667793 /* InfoPlist.strings in Resources */,
 				4D01619C1990DE4200667793 /* Main.storyboard in Resources */,
@@ -425,6 +442,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D370DC41994C5F900898B32 /* CreateMemeViewController.m in Sources */,
 				4DC4BFA41991E7FD00C638EE /* UIImageView+HighlightedWebCache.m in Sources */,
 				4DC4BF9B1991E7FD00C638EE /* SDWebImageDecoder.m in Sources */,
 				4DC4BFA51991E7FD00C638EE /* UIImageView+WebCache.m in Sources */,
