@@ -12,10 +12,13 @@
 #import "UIImage+Resize.h"
 #import "ALAssetsLibrary+CustomAlbum.h"
 
+#import "MyPageViewController.h"
+#import "PageViewControllerData.h"
+
 
 @interface ViewController ()
-    @property (nonatomic, strong) NSMutableArray *imagesArray;
-    @property (nonatomic, weak) IBOutlet UIScrollView *imagesScrollView;
+    @property (nonatomic, strong) ALAssetsGroup *groupAsset;
+    @property (nonatomic, strong) NSMutableArray *assets;
 @end
 
 NSString *k_album = @"BUTANGKIS";
@@ -27,11 +30,41 @@ NSString *k_album = @"BUTANGKIS";
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-    self.library = [[ALAssetsLibrary alloc] init];
+    if (self.library == nil) {
+        _library = [[ALAssetsLibrary alloc] init];
+    }
+    if (self.assets == nil) {
+        _assets = [[NSMutableArray alloc] init];
+    } else {
+        [self.assets removeAllObjects];
+    }
     
-    self.imagesArray = [[NSMutableArray alloc] init];
     
-    [self loadSavedImges];
+    // emumerate through our groups and look for k_album
+    ALAssetsLibraryGroupsEnumerationResultsBlock listGroupBlock = ^(ALAssetsGroup *group, BOOL *stop) {
+        
+        ALAssetsFilter *onlyPhotosFilter = [ALAssetsFilter allPhotos];
+        [group setAssetsFilter:onlyPhotosFilter];
+        if ([group numberOfAssets] > 0)
+        {
+            if([[group valueForProperty:ALAssetsGroupPropertyName] isEqualToString:k_album])
+            {
+                self.groupAsset = group;
+            }
+        }
+        else
+        {
+            //[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+            [self prepareAssets];
+        }
+    };
+    
+    // enumerate only photos
+    NSUInteger groupTypes = ALAssetsGroupAlbum | ALAssetsGroupEvent | ALAssetsGroupFaces | ALAssetsGroupSavedPhotos;
+    [self.library enumerateGroupsWithTypes:groupTypes usingBlock:listGroupBlock failureBlock:^(NSError *error) {
+        if(error)
+            DDLogVerbose(@"enumeration failed %@",error);
+    }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -103,9 +136,7 @@ NSString *k_album = @"BUTANGKIS";
         }];*/
         
         [self.library saveImage:lowResImage toAlbum:k_album completion:^(NSURL *assetURL, NSError *error) {
-            
-            [self loadSavedImges];
-            
+            [self prepareAssets];
         } failure:^(NSError *error) {
             
         }];
@@ -114,113 +145,71 @@ NSString *k_album = @"BUTANGKIS";
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
--(void)cleanGallery
+
+-(void)prepareAssets
 {
-    [self.imagesArray removeAllObjects];
-    for (UIView *subView in [self.imagesScrollView subviews]) {
-        if([subView isKindOfClass:[UIScrollView class]])
-        {
-            [subView removeFromSuperview];
-        }
+    if (!self.assets) {
+        _assets = [[NSMutableArray alloc] init];
+    } else {
+        [self.assets removeAllObjects];
     }
+    
+    ALAssetsGroupEnumerationResultsBlock assetsEnumerationBlock = ^(ALAsset *result, NSUInteger index, BOOL *stop) {
+        
+        if (result) {
+            [self.assets addObject:result];
+        }
+    };
+    
+    ALAssetsFilter *onlyPhotosFilter = [ALAssetsFilter allPhotos];
+    [self.groupAsset setAssetsFilter:onlyPhotosFilter];
+    [self.groupAsset enumerateAssetsUsingBlock:assetsEnumerationBlock];
+    
+    [self.collectionView reloadData];
 }
 
--(void)loadSavedImges
-{
 
-    [self.library loadImagesFromAlbum:k_album completion:^(NSMutableArray *images, NSError *error) {
-        NSArray *reversedArray = [[images reverseObjectEnumerator] allObjects];
-        
-        self.imagesArray = (NSMutableArray *)reversedArray;
-        
-        [self drawGallery];
+#pragma mark - UICollectionViewDelegate
 
-    }];
+- (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section {
+    
+    return self.assets.count;
+}
+
+#define kImageViewTag 1 // the image view inside the collection view cell prototype is tagged with "1"
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    static NSString *CellIdentifier = @"photoCell";
+    
+    UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
+    
+    // load the asset for this cell
+    ALAsset *asset = self.assets[indexPath.row];
+    CGImageRef thumbnailImageRef = [asset thumbnail];
+    UIImage *thumbnail = [UIImage imageWithCGImage:thumbnailImageRef];
+    
+    // apply the image to the cell
+    UIImageView *imageView = (UIImageView *)[cell viewWithTag:kImageViewTag];
+    imageView.image = thumbnail;
+    
+    return cell;
 }
 
 
--(void)drawGallery
-{
-    int thumbNalilSize = 140;
+#pragma mark - Segue support
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    int lastYPos = 0;
-    
-    CGRect frame;
-    
-    int nthTile = 1;
-    
-    for (int i = 0; i < self.imagesArray.count; i++) {
+    if ([[segue identifier] isEqualToString:@"showPhoto"]) {
         
-        if(nthTile == 1)
-        {
-            UIImageView *imageView = [[UIImageView alloc] init];
-            imageView.tag = i;
-            imageView.contentMode = UIViewContentModeScaleAspectFill;
-            
-            frame.origin.x = 0;
-            frame.origin.y = lastYPos;
-            frame.size.height = thumbNalilSize;
-            frame.size.width = thumbNalilSize;
-            
-            imageView.frame = frame;
-            
-            UIImage *img = (UIImage *)[self.imagesArray objectAtIndex:i];
-            imageView.image = [img imageWithImage:img scaledToFillSize:CGSizeMake(thumbNalilSize, thumbNalilSize)];
-            
-            [self.imagesScrollView addSubview:imageView];
-            
-            nthTile++;
-        }
-        else if (nthTile == 2)
-        {
-            UIImageView *imageView = [[UIImageView alloc] init];
-            imageView.tag = i;
-            imageView.contentMode = UIViewContentModeScaleAspectFill;
-            
-            frame.origin.x = 108;
-            frame.origin.y = lastYPos;
-            frame.size.height = thumbNalilSize;
-            frame.size.width = thumbNalilSize;
-            
-            imageView.frame = frame;
-            
-            UIImage *img = (UIImage *)[self.imagesArray objectAtIndex:i];
-            imageView.image = [img imageWithImage:img scaledToFillSize:CGSizeMake(thumbNalilSize, thumbNalilSize)];
-            
-            [self.imagesScrollView addSubview:imageView];
-            
-            nthTile++;
-        }
-        else if (nthTile == 3)
-        {
-            UIImageView *imageView = [[UIImageView alloc] init];
-            imageView.tag = i;
-            imageView.contentMode = UIViewContentModeScaleAspectFill;
-            
-            frame.origin.x = 216;
-            frame.origin.y = lastYPos;
-            frame.size.height = thumbNalilSize;
-            frame.size.width = thumbNalilSize;
-            
-            imageView.frame = frame;
-            
-            UIImage *img = (UIImage *)[self.imagesArray objectAtIndex:i];
-            imageView.image = [img imageWithImage:img scaledToFillSize:CGSizeMake(thumbNalilSize, thumbNalilSize)];
-            
-            [self.imagesScrollView addSubview:imageView];
-            
-            //reset tile
-            nthTile = 1;
-            
-            //move down tiles to next row
-            lastYPos = frame.origin.y + thumbNalilSize + 4;
-        }
+        // hand off the assets of this album to our singleton data source
+        [PageViewControllerData sharedInstance].photoAssets = self.assets;
         
-        //adjust scrollview
-        if(lastYPos > self.imagesScrollView.frame.size.height)
-        {
-            self.imagesScrollView.contentSize = CGSizeMake(self.imagesScrollView.frame.size.width, lastYPos + thumbNalilSize);
-        }
+        // start viewing the image at the appropriate cell index
+        MyPageViewController *pageViewController = [segue destinationViewController];
+        NSIndexPath *selectedCell = [self.collectionView indexPathsForSelectedItems][0];
+        pageViewController.startingIndex = selectedCell.row;
     }
 }
 

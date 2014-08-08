@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>0A40F0A8-043A-46B1-94F0-EDE07B40DD08</string>
+	<key>IDESourceControlProjectName</key>
+	<string>BUTANGKIS</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>50492653-D9F9-4E62-873C-AFD6189C814E</key>
+		<string>https://github.com/romano2717/BUTANGKIS.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>BUTANGKIS.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>50492653-D9F9-4E62-873C-AFD6189C814E</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/romano2717/BUTANGKIS.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>50492653-D9F9-4E62-873C-AFD6189C814E</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>50492653-D9F9-4E62-873C-AFD6189C814E</string>
+			<key>IDESourceControlWCCName</key>
+			<string>BUTANGKIS</string>
+		</dict>
+	</array>
+</dict>
+</plist>

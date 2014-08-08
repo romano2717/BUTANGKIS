@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 
-@interface ViewController : UIViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate>
+@interface ViewController : UICollectionViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate>
 
 @property (nonatomic, strong)ALAssetsLibrary *library;
 
