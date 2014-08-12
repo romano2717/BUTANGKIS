@@ -10,8 +10,8 @@
 
 @interface CreateMemeViewController ()
 @property (nonatomic, weak) IBOutlet UIImageView *imageView;
-@property (nonatomic, weak) IBOutlet UITextView *topTextView;
-@property (nonatomic, weak) IBOutlet UITextView *bottomTextView;
+@property (nonatomic, weak) IBOutlet UILabel *topTextLabel;
+@property (nonatomic, weak) IBOutlet UILabel *bottomTextLabel;
 @end
 
 @implementation CreateMemeViewController
@@ -32,6 +32,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+    tap.numberOfTapsRequired = 1;
+    [self.view addGestureRecognizer:tap];
+    
     self.imageView.image = image;
 }
 
@@ -50,5 +54,4 @@
 {
 
 }
-
 @end
