@@ -49,7 +49,7 @@ NSString *k_album = @"BUTANGKIS";
     picker.sourceType = UIImagePickerControllerSourceTypeCamera;
     picker.modalPresentationStyle = UIModalPresentationFullScreen;
 
-    [self presentViewController:picker animated:YES completion:NULL];
+    [self presentViewController:picker animated:YES completion:nil];
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
@@ -92,13 +92,9 @@ NSString *k_album = @"BUTANGKIS";
         
         [self.library saveImage:takenImage toAlbum:k_album completion:^(NSURL *assetURL, NSError *error) {
         
-            //[self cleanUpAssetAndGroup];
-            //[self enumerateAsset];
-            
-            [picker dismissViewControllerAnimated:NO completion:NULL];
-            
-            [self createMeme:takenImage];
-        
+            [picker dismissViewControllerAnimated:NO completion:^{
+                [self createMeme:takenImage];
+            }];
         } failure:^(NSError *error) {
             DDLogVerbose(@"Saving image failed: %@",error);
         }];

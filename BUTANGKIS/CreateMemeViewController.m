@@ -7,14 +7,18 @@
 //
 
 #import "CreateMemeViewController.h"
+#import "THLabel.h"
 
 @interface CreateMemeViewController ()
 @property (nonatomic, weak) IBOutlet UIImageView *imageView;
-@property (nonatomic, weak) IBOutlet UILabel *topTextLabel;
-@property (nonatomic, weak) IBOutlet UILabel *bottomTextLabel;
+@property (nonatomic, weak) IBOutlet THLabel *topTextLabel;
+@property (nonatomic, weak) IBOutlet THLabel *bottomTextLabel;
 @end
 
 @implementation CreateMemeViewController
+
+#define kStrokeColor		[UIColor blackColor]
+#define kStrokeSize			(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 5.0 : 2.0)
 
 @synthesize image;
 
@@ -32,11 +36,14 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
-    tap.numberOfTapsRequired = 1;
-    [self.view addGestureRecognizer:tap];
-    
+    //set image
     self.imageView.image = image;
+    
+    self.topTextLabel.strokeColor = kStrokeColor;
+    self.topTextLabel.strokeSize = kStrokeSize;
+    
+    self.bottomTextLabel.strokeColor = kStrokeColor;
+    self.bottomTextLabel.strokeSize = kStrokeSize;
 }
 
 - (void)didReceiveMemoryWarning
